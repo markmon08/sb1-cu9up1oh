@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #00a896;
+  --secondary: #028090;
+}
+
+body {
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+              url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=1000') center/cover;
+  min-height: 100vh;
+  margin: 0;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.game-container {
+  @apply max-w-lg mx-auto min-h-screen relative px-4 py-6 flex flex-col;
+}
+
+.status-bar {
+  @apply sticky top-4 z-50 backdrop-blur-md bg-teal-600/90;
+}
+
+.side-buttons {
+  @apply fixed left-4 top-1/2 -translate-y-1/2 flex flex-col gap-4 z-40;
+}
+
+.side-button {
+  @apply bg-white/90 backdrop-blur-sm p-3 rounded-xl flex flex-col items-center gap-2 
+         cursor-pointer transition-transform hover:scale-105 shadow-lg;
+}
+
+.progress-bar {
+  @apply w-full h-6 bg-black/20 rounded-2xl overflow-hidden my-4;
+}
+
+.progress-fill {
+  @apply h-full bg-green-500 transition-all duration-300;
+}
+
+.nav-bar {
+  @apply fixed bottom-0 left-0 right-0 bg-teal-600/90 backdrop-blur-md py-4 px-6
+         flex justify-around items-center rounded-t-3xl z-50;
+}
+
+.nav-item {
+  @apply flex flex-col items-center text-white/90 gap-1 transition-transform hover:scale-110;
+}
+
+.nav-item svg {
+  @apply w-6 h-6;
+}
+
+/* Spinning wheel animation */
+.transition-transform {
+  transition-property: transform;
+}
+
+.duration-3000 {
+  transition-duration: 3000ms;
+}
+
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Confetti animation */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -10px;
+  animation: confetti-fall linear forwards, confetti-shake 3s ease-in-out infinite;
+}
+
+@keyframes confetti-fall {
+  to {
+    top: 100%;
+  }
+}
+
+@keyframes confetti-shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(5px);
+  }
+  50% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+/* Fade in animation */
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pop in animation */
+.animate-pop-in {
+  animation: pop-in 0.3s ease-out forwards;
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  .side-buttons {
+    @apply scale-90 left-2;
+  }
+  
+  .right-buttons {
+    @apply scale-90 right-2;
+  }
+  
+  .bottom-stats {
+    @apply px-2;
+  }
+  
+  .stat-item {
+    @apply px-3 py-2 text-sm;
+  }
+
+  .game-container {
+    @apply px-2 py-4;
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-container {
+    @apply max-w-2xl;
+  }
+}
+
+/* Safe area padding for mobile devices */
+@supports(padding: max(0px)) {
+  .game-container {
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    padding-top: max(1.5rem, env(safe-area-inset-top));
+  }
+
+  .nav-bar {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
