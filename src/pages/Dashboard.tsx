@@ -26,6 +26,32 @@ function Dashboard() {
   const [isDevourOpen, setIsDevourOpen] = useState(false);
   const [isBreakthroughOpen, setIsBreakthroughOpen] = useState(false);
   const [isSpiderModalOpen, setIsSpiderModalOpen] = useState(false);
+  const [currentPosition, setCurrentPosition] = useState(0);
+
+  // Web points for the spider to move through
+  const webPoints = [
+    { top: '25%', left: '25%' },
+    { top: '25%', right: '25%' },
+    { top: '50%', left: '50%' },
+    { top: '75%', left: '25%' },
+    { top: '75%', right: '25%' },
+    { top: '35%', left: '35%' },
+    { top: '35%', right: '35%' },
+    { top: '65%', left: '35%' },
+    { top: '65%', right: '35%' },
+    { top: '50%', left: '25%' },
+    { top: '50%', right: '25%' },
+    { top: '40%', left: '50%' },
+    { top: '60%', left: '50%' }
+  ];
+
+  // Move spider to next position every 8 seconds with smooth transition
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPosition((prev) => (prev + 1) % webPoints.length);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Calculate level progress
   const nextLevelXP = activeSpider ? experienceForNextLevel(activeSpider.level) : 0;
@@ -87,10 +113,9 @@ function Dashboard() {
 
   return (
     <div className="game-container">
-      {/* Balance Display - Updated with placeholder images */}
+      {/* Balance Display */}
       <div className="fixed top-4 left-0 right-0 px-6 z-40">
-        <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-3 max-w-md mx-auto flex justify-center gap-4">
-          {/* $SPIDER Balance */}
+        <div className="glass-panel p-3 max-w-md mx-auto flex justify-center gap-8">
           <div className="flex items-center gap-2">
             <img 
               src="https://placehold.co/20x20/blue/white?text=$" 
@@ -101,7 +126,6 @@ function Dashboard() {
             <span className="text-white text-sm font-bold">{player.balance.SPIDER}</span>
           </div>
           
-          {/* Feeders Balance */}
           <div className="flex items-center gap-2">
             <span className="text-white text-sm">🍖</span>
             <span className="text-white text-sm">|</span>
@@ -113,35 +137,35 @@ function Dashboard() {
       <div className="side-buttons">
         <button 
           onClick={() => setIsRankingOpen(true)}
-          className={`${sideButtonClasses} bg-yellow-500`}
+          className={`${sideButtonClasses} bg-yellow-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/yellow/white?text=⭐')" }}
         >
           <span className="sr-only">Rankings</span>
         </button>
         <button 
           onClick={() => setIsBreedingOpen(true)}
-          className={`${sideButtonClasses} bg-purple-500`}
+          className={`${sideButtonClasses} bg-purple-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/purple/white?text=🕷️')" }}
         >
           <span className="sr-only">Breeding</span>
         </button>
         <button 
           onClick={() => setIsRedeemOpen(true)}
-          className={`${sideButtonClasses} bg-blue-500`}
+          className={`${sideButtonClasses} bg-blue-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/blue/white?text=$')" }}
         >
           <span className="sr-only">Redeem</span>
         </button>
         <button 
           onClick={() => setIsDevourOpen(true)}
-          className={`${sideButtonClasses} bg-red-500`}
+          className={`${sideButtonClasses} bg-red-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/red/white?text=🍽️')" }}
         >
           <span className="sr-only">Devour</span>
         </button>
         <button 
           onClick={() => setIsBreakthroughOpen(true)}
-          className={`${sideButtonClasses} bg-purple-700`}
+          className={`${sideButtonClasses} bg-purple-700 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/purple/white?text=⚡')" }}
         >
           <span className="sr-only">Breakthrough</span>
@@ -151,21 +175,21 @@ function Dashboard() {
       <div className="right-buttons fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-40">
         <button 
           onClick={() => setIsSummonOpen(true)}
-          className={`${sideButtonClasses} bg-orange-500`}
+          className={`${sideButtonClasses} bg-orange-500 glow-effect shimmer`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/orange/white?text=🎯')" }}
         >
           <span className="sr-only">Summon</span>
         </button>
         <button 
           onClick={() => setIsSkinOpen(true)}
-          className={`${sideButtonClasses} bg-purple-500`}
+          className={`${sideButtonClasses} bg-purple-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/purple/white?text=👕')" }}
         >
           <span className="sr-only">Skin</span>
         </button>
         <button 
           onClick={() => setIsWebtrapOpen(true)}
-          className={`${sideButtonClasses} bg-blue-500`}
+          className={`${sideButtonClasses} bg-blue-500 glow-effect`}
           style={{ backgroundImage: "url('https://placehold.co/100x100/blue/white?text=🕸️')" }}
         >
           <span className="sr-only">Webtrap</span>
@@ -174,26 +198,50 @@ function Dashboard() {
 
       <div className="flex-1 flex items-center justify-center">
         <div className="relative w-full max-w-md">
-          <img 
-            src="data:image/svg+xml,%3Csvg width='400' height='400' viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M200 0 L400 200 L200 400 L0 200 Z' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E"
-            alt="Spider Web"
-            className="w-full opacity-80"
-          />
-          <div className="absolute top-1/4 right-1/4">
+          <svg className="w-full" viewBox="0 0 400 400">
+            <path 
+              d="M200,0 L400,200 L200,400 L0,200 Z M200,0 L200,400 M0,200 L400,200" 
+              fill="none" 
+              stroke="white" 
+              strokeWidth="2" 
+              className="opacity-80"
+            />
+            <path 
+              d="M100,100 L300,100 L300,300 L100,300 Z" 
+              fill="none" 
+              stroke="white" 
+              strokeWidth="2" 
+              className="opacity-80"
+            />
+            <path 
+              d="M150,150 L250,150 L250,250 L150,250 Z" 
+              fill="none" 
+              stroke="white" 
+              strokeWidth="2" 
+              className="opacity-80"
+            />
+          </svg>
+          
+          <div 
+            className={`absolute transition-all duration-[5000ms] ease-in-out`}
+            style={{
+              ...webPoints[currentPosition],
+              transform: `translate(-50%, -50%)`
+            }}
+          >
             <button 
               onClick={() => setIsSpiderModalOpen(true)}
-              className="w-12 h-12 bg-green-800 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform"
+              className="w-24 h-24 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg glow-effect"
             >
               <img 
-                src="https://placehold.co/100x100/teal/white?text=🕷️" 
+                src="https://placehold.co/100x100/transparent/white?text=🕷️"
                 alt="Spider" 
                 className="w-full h-full object-cover rounded-2xl"
               />
             </button>
           </div>
           
-          {/* Spider Level Bar */}
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-teal-700/90 backdrop-blur-sm px-3 py-1 rounded-xl w-28">
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 glass-panel px-3 py-1 rounded-xl w-28">
             <div className="flex justify-center items-center">
               <span className="text-white font-bold text-sm">Level {activeSpider.level}</span>
             </div>
@@ -207,9 +255,9 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Status Bars Container - Smaller and with tooltips */}
+      {/* Status Bars Container */}
       <div className="fixed bottom-24 left-0 right-0 px-6 z-40">
-        <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-3 max-w-md mx-auto">
+        <div className="glass-panel p-3 max-w-md mx-auto">
           {/* Health Bar */}
           <div className="mb-2">
             <div className="flex justify-between items-center mb-1">
